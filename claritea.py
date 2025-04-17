@@ -2,6 +2,7 @@ import argparse
 import io
 import os
 import sys
+from pathlib import Path
 
 import git
 
@@ -20,9 +21,16 @@ def main():
     repo_path = repo.working_tree_dir
     if not repo_path:
         return
+    abspath = Path(options.path).absolute()
+    subpath = abspath.relative_to(repo_path)
 
     tracked_files = [
         f for (f, _) in repo.index.entries.keys() if str(f).endswith(".py")
+    ]
+    tracked_files = [
+        f
+        for f in tracked_files
+        if Path(f).absolute().as_posix().startswith(subpath.absolute().as_posix())
     ]
     combined_content = io.StringIO()
     for file_path in tracked_files:
