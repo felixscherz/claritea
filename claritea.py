@@ -8,7 +8,7 @@ import git
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("path", default=".")
+    parser.add_argument("path", default=os.getcwd(), nargs="?")
 
     return parser.parse_args()
 
